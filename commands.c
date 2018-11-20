@@ -9,6 +9,7 @@
 //**************************************************************************************
 int ExeCmd(void* jobs, char* lineSize, char* cmdString)
 {
+	int status;
 	char* cmd; 
 	char* args[MAX_ARG];
 	char pwd[MAX_LINE_SIZE];
@@ -33,13 +34,14 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString)
 /*************************************************/
 	if (!strcmp(cmd, "cd") ) 
 	{
-		
+
+
 	} 
 	
 	/*************************************************/
 	else if (!strcmp(cmd, "pwd")) 
 	{
-		
+
 	}
 	
 	/*************************************************/
@@ -97,12 +99,13 @@ void ExeExternal(char *args[MAX_ARG], char* cmdString)
 	int pID;
     	switch(pID = fork()) 
 	{
-    		case -1: 
+    		case -1:
 					// Add your code here (error)
 					
 					/* 
 					your code
 					*/
+    				break;
         	case 0 :
                 	// Child Process
                		setpgrp();
@@ -112,13 +115,14 @@ void ExeExternal(char *args[MAX_ARG], char* cmdString)
 					/* 
 					your code
 					*/
-			
-			default:
+               		break;
+        	default:
                 	// Add your code here
-					
+					printf("error/n");
 					/* 
 					your code
-					*/
+					 */
+					break;
 	}
 }
 //**************************************************************************************
