@@ -25,7 +25,6 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString)
 		args[i] = strtok(NULL, delimiters); 
 		if (args[i] != NULL) 
 			num_arg++; 
- 
 	}
 /*************************************************/
 // Built in Commands PLEASE NOTE NOT ALL REQUIRED
@@ -41,7 +40,20 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString)
 	/*************************************************/
 	else if (!strcmp(cmd, "pwd")) 
 	{
+		if (num_arg != 0){
+			illegal_cmd = TRUE;
+		}
+		else {
+			if (getcwd(pwd,sizeof(pwd))!= NULL){
+				printf("%s\n", pwd);
+				return 0;
+			}
+			else {
+				perror ("pwd failed\n");
+				return 1;
+			}
 
+		}
 	}
 	
 	/*************************************************/
@@ -58,7 +70,13 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString)
 	/*************************************************/
 	else if (!strcmp(cmd, "showpid")) 
 	{
-		
+		if (num_arg != 0){
+			illegal_cmd = TRUE;
+		}
+		else {
+			printf("smash pid is %d\n", getpid());
+			return 0;
+		}
 	}
 	/*************************************************/
 	else if (!strcmp(cmd, "fg")) 
