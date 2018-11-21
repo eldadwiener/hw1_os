@@ -7,7 +7,18 @@
 // Parameters: pointer to jobs, command string
 // Returns: 0 - success,1 - failure
 //**************************************************************************************
-int ExeCmd(void* jobs, char* lineSize, char* cmdString)
+
+struct job {
+	int jobId;
+	pid_t pid_num;
+	time_t tIn2jobs;
+	Pjob pNext;
+	Pjob pPrev;
+};
+
+typedef struct job job;
+
+int ExeCmd(PjobsL jobs, char* lineSize, char* cmdString)
 {
 	int status;
 	char* cmd; 
@@ -52,7 +63,6 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString)
 				perror ("pwd failed\n");
 				return 1;
 			}
-
 		}
 	}
 	
@@ -89,6 +99,23 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString)
   		
 	}
 	/*************************************************/
+	else if (!strcmp(cmd, "mv")) // not finish yet, what should happen when you trying to change an open file?
+	{
+		if (num_arg != 2){
+			illegal_cmd = TRUE;
+		}
+		else {
+			if(rename(args[1], args[2]) == 0)
+			{
+				printf("%s has been renamed to %s\n", args[1], args[2]);
+			}
+			else
+			{
+				perror("mv failed\n");
+			}
+		}
+	}
+	/*************************************************/
 	else if (!strcmp(cmd, "quit"))
 	{
    		
@@ -101,6 +128,7 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString)
 	}
 	if (illegal_cmd == TRUE)
 	{
+
 		printf("smash error: > \"%s\"\n", cmdString);
 		return 1;
 	}
@@ -119,10 +147,7 @@ void ExeExternal(char *args[MAX_ARG], char* cmdString)
 	{
     		case -1:
 					// Add your code here (error)
-					
-					/* 
-					your code
-					*/
+    			perror("error at fork()/n");
     				break;
         	case 0 :
                 	// Child Process
@@ -136,7 +161,7 @@ void ExeExternal(char *args[MAX_ARG], char* cmdString)
                		break;
         	default:
                 	// Add your code here
-					printf("error/n");
+
 					/* 
 					your code
 					 */
@@ -169,7 +194,7 @@ int ExeComp(char* lineSize)
 // Parameters: command string, pointer to jobs
 // Returns: 0- BG command -1- if not
 //**************************************************************************************
-int BgCmd(char* lineSize, void* jobs)
+int BgCmd(char* lineSize, PjobsL jobs)
 {
 
 	char* Command;
@@ -178,12 +203,30 @@ int BgCmd(char* lineSize, void* jobs)
 	if (lineSize[strlen(lineSize)-2] == '&')
 	{
 		lineSize[strlen(lineSize)-2] = '\0';
-		// Add your code here (execute a in the background)
-					
-		/* 
-		your code
-		*/
-		
+		int pID;
+	    	switch(pID = fork())
+		{
+	    		if (pID==-1){
+						// Add your code here (error)
+	    				printf("error/n");
+						return -1;
+	    				}
+	    		else if (pID == 0){
+	                	// Child Process
+	               		setpgrp();
+						execv("/bin/ls",lineSize);
+	    		}
+	    		else {
+	        			Pjob jobP = malloc(sizeof(job));
+	        			jobP->pid_num = pID;
+	        			jobP->jobId = (jobs->proc_num+1);
+	        			jobP->tIn2jobs=time(NULL);
+	        			jobP->pNext=jobs->backJ;
+	        			jobP->pPrev=NULL;
+	        			jobs->backJ=jobP;
+	        			(jobs->proc_num)++;
+	    		}
+		}
 	}
 	return -1;
 }

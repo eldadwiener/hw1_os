@@ -10,11 +10,17 @@
 #include <sys/wait.h>
 #define MAX_LINE_SIZE 80
 #define MAX_ARG 20
-#define SMASH_ERROR_MSG 15
 typedef enum { FALSE , TRUE } bool;
+typedef struct job* Pjob;
+typedef struct jobsL* PjobsL;
+typedef struct jobsL {
+	Pjob backJ;
+	Pjob stopJ;
+	int proc_num;
+} jobsL;
 int ExeComp(char* lineSize);
-int BgCmd(char* lineSize, void* jobs);
-int ExeCmd(void* jobs, char* lineSize, char* cmdString);
+int BgCmd(char* lineSize, PjobsL jobs);
+int ExeCmd(PjobsL jobs, char* lineSize, char* cmdString);
 void ExeExternal(char *args[MAX_ARG], char* cmdString);
 #endif
 

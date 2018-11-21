@@ -14,7 +14,7 @@ main file. This file contains the main function of smash
 #define MAXARGS 20
 
 char* L_Fg_Cmd;
-void* jobs = NULL; //This represents the list of jobs. Please change to a preferred type (e.g array of char*)
+PjobsL jobs; //This represents the list of jobs. Please change to a preferred type (e.g array of char*)
 char lineSize[MAX_LINE_SIZE]; 
 //**************************************************************************************
 // function name: main
@@ -22,9 +22,7 @@ char lineSize[MAX_LINE_SIZE];
 //**************************************************************************************
 int main(int argc, char *argv[])
 {
-    char cmdString[MAX_LINE_SIZE]; 	   
-
-	
+    char cmdString[MAX_LINE_SIZE];
 	//signal declaretions
 	//NOTE: the signal handlers and the function/s that sets the handler should be found in siganls.c
 	 /* add your code here */
@@ -38,9 +36,8 @@ int main(int argc, char *argv[])
     // new commit
 	/************************************/
 	// Init globals 
-
-
-	
+    jobsL jobl = {NULL,NULL,0};
+    jobs = &jobl;
 	L_Fg_Cmd =(char*)malloc(sizeof(char)*(MAX_LINE_SIZE+1));
 	if (L_Fg_Cmd == NULL) 
 			exit (-1); 

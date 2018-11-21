@@ -2,15 +2,15 @@
 
 missions:
   1. built_in commands:
-    a. pwd --eldad
+    a. pwd --eldad DONE
     b. cd (save the previos location) -- edi
     c. history create string queue (51 cells) -- edi
     d. jobs (for non_built_in_command)+create list of jobs+find how to maintain it
-    e. showpid -- eldad
+    e. showpid -- eldad DONE
     f. fg (for non_built_command) 
     g. bg (for non_built_command)+create data_structure to save the jobs
     h. quit (two options)
-    i. mv --eldad
+    i. mv --eldad DONE
   2. shell commands (execv()?)
   3. signals:
     a. kill
