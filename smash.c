@@ -32,29 +32,35 @@ int main(int argc, char *argv[])
 	//set your signal handlers here
 	/* add your code here */
 
+
+    newHandler(SIGINT,&CtrlC);
+    newHandler(SIGTSTP,&CtrlZ);
+
 	/************************************/
     // new commit
 	/************************************/
 	// Init globals 
-    jobsL jobl = {NULL,NULL,0};
+    jobsL jobl = {NULL,0,NULL};
     jobs = &jobl;
+    histList hlist = {NULL,NULL,0};
 	L_Fg_Cmd =(char*)malloc(sizeof(char)*(MAX_LINE_SIZE+1));
 	if (L_Fg_Cmd == NULL) 
 			exit (-1); 
 	L_Fg_Cmd[0] = '\0';
-	
     	while (1)
     	{
 	 	printf("smash > ");
 		fgets(lineSize, MAX_LINE_SIZE, stdin);
-		strcpy(cmdString, lineSize);    	
+		strcpy(cmdString, lineSize);
 		cmdString[strlen(lineSize)-1]='\0';
+		//
+		updateHistList(lineSize, &hlist);
 					// perform a complicated Command
 		if(!ExeComp(lineSize)) continue; 
 					// background command	
 	 	if(!BgCmd(lineSize, jobs)) continue; 
 					// built in commands
-		ExeCmd(jobs, lineSize, cmdString);
+		ExeCmd(jobs, lineSize, cmdString , hlist);
 		
 		/* initialize for next line read*/
 		lineSize[0]='\0';
