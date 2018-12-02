@@ -7,8 +7,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
+#include "commands.h"
 
+typedef void (*newAct)() ;
 
+void newHandler(int signal, newAct );
+
+void CtrlC();
+
+void CtrlZ();
 
 #endif
 
